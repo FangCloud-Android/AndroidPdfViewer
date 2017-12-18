@@ -4,20 +4,20 @@ ext {
     bintrayRepo = 'maven'
     bintrayName = 'android-pdf-viewer'
 
-    publishedGroupId = 'com.github.barteksc'
+    publishedGroupId = 'com.egeio.barteksc.lx'
     libraryName = 'AndroidPdfViewer'
     artifact = 'android-pdf-viewer'
 
-    libraryDescription = 'Android view for displaying PDFs rendered with PdfiumAndroid'
+    libraryDescription = 'Android view for displaying PDFs rendered with PdfiumAndroid, edit horizontally scroll position'
 
-    siteUrl = 'https://github.com/barteksc/AndroidPdfViewer'
-    gitUrl = 'https://github.com/barteksc/AndroidPdfViewer.git'
+    siteUrl = 'https://github.com/leixin525/AndroidPdfViewer'
+    gitUrl = 'https://github.com/leixin525/AndroidPdfViewer.git'
 
-    libraryVersion = '3.0.0-beta.4'
+    libraryVersion = '3.0.0-lx.beta.1'
 
-    developerId = 'barteksc'
-    developerName = 'Bartosz Schiller'
-    developerEmail = 'barteksch@boo.pl'
+    developerId = 'leixin525'
+    developerName = 'leixin'
+    developerEmail = 'leixin525@gmail.com'
 
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'

@@ -365,6 +365,16 @@ public class PDFView extends RelativeLayout {
         return doubletapEnabled;
     }
 
+    private boolean alwaysScrollToPageStart;
+
+    boolean alwaysScrollToPageStart() {
+        return alwaysScrollToPageStart;
+    }
+
+    public void setAlwaysScrollToPageStart(boolean alwaysScrollToPageStart) {
+        this.alwaysScrollToPageStart = alwaysScrollToPageStart;
+    }
+
     void onPageError(PageRenderingException ex) {
         if (!callbacks.callOnPageError(ex.getPage(), ex.getCause())) {
             Log.e(TAG, "Cannot open page " + ex.getPage(), ex.getCause());
@@ -1162,6 +1172,8 @@ public class PDFView extends RelativeLayout {
 
         private boolean annotationRendering = false;
 
+        private boolean alwaysScrollToPageStart = false;
+
         private String password = null;
 
         private ScrollHandle scrollHandle = null;
@@ -1188,6 +1200,11 @@ public class PDFView extends RelativeLayout {
 
         public Configurator enableDoubletap(boolean enableDoubletap) {
             this.enableDoubletap = enableDoubletap;
+            return this;
+        }
+
+        public Configurator alwaysScrollToPageStart(boolean alwaysScrollToPageStart) {
+            this.alwaysScrollToPageStart = alwaysScrollToPageStart;
             return this;
         }
 
@@ -1297,6 +1314,7 @@ public class PDFView extends RelativeLayout {
             PDFView.this.enableDoubletap(enableDoubletap);
             PDFView.this.setDefaultPage(defaultPage);
             PDFView.this.setSwipeVertical(!swipeHorizontal);
+            PDFView.this.setAlwaysScrollToPageStart(alwaysScrollToPageStart);
             PDFView.this.enableAnnotationRendering(annotationRendering);
             PDFView.this.setScrollHandle(scrollHandle);
             PDFView.this.enableAntialiasing(antialiasing);

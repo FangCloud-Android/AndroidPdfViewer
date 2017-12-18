@@ -46,6 +46,14 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
     private boolean scaling = false;
     private boolean enabled = false;
 
+    // 记录当前滚动方向
+    enum Director {Left, Right, Up, Down, None}
+    private Director director = Director.None;
+    /**
+     * 是否可以滚动到下一页
+     */
+    private boolean scrollNext = false;
+
     DragPinchManager(PDFView pdfView, AnimationManager animationManager) {
         this.pdfView = pdfView;
         this.animationManager = animationManager;
@@ -145,6 +153,19 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         scrolling = true;
+
+        if (pdfView.isSwipeVertical()) {
+            if (distanceY > 0)
+                director = Director.Down;
+            else
+                director = Director.Up;
+        } else {
+            if (distanceX > 0)
+                director = Director.Right;
+            else
+                director = Director.Left;
+        }
+
         if (pdfView.isZooming() || pdfView.isSwipeEnabled()) {
             pdfView.moveRelativeTo(-distanceX, -distanceY);
         }
@@ -155,6 +176,10 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
     }
 
     private void onScrollEnd(MotionEvent event) {
+        if (pdfView.alwaysScrollToPageStart() && !pdfView.isZooming()) {
+            checkLatestScrollPosition();
+        }
+
         pdfView.loadPages();
         hideHandle();
     }
@@ -236,6 +261,54 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
         ScrollHandle scrollHandle = pdfView.getScrollHandle();
         if (scrollHandle != null && scrollHandle.shown()) {
             scrollHandle.hideDelayed();
+        }
+    }
+
+    /**
+     * 滚动停止时，检测当前滚动位置是否未页面起始位置
+     */
+    private void checkLatestScrollPosition() {
+        int xOffset = (int) pdfView.getCurrentXOffset();
+        int yOffset = (int) pdfView.getCurrentYOffset();
+
+        float zoom = pdfView.getZoom();
+        boolean isSwipeVertical = pdfView.isSwipeVertical();
+        PdfFile pdfFile = pdfView.pdfFile;
+
+        float pageOffsetStart;
+        int pageNumber;
+        if (isSwipeVertical) {
+            float absYoffset = Math.abs(yOffset);
+            pageNumber = pdfFile.getPageAtOffset(absYoffset, zoom);
+            pageOffsetStart = pdfFile.getPageOffset(pageNumber, zoom);
+            SizeF size = pdfFile.getScaledPageSize(pageNumber, zoom);
+            if (pageNumber < pdfFile.getPagesCount() && scrollNext) {
+                if (director == Director.Down) {
+                    animationManager.startYAnimation(yOffset, (int)(absYoffset - pdfFile.getPageOffset(pageNumber + 1, zoom)));
+                } else if (director == Director.Up) {
+                    animationManager.startYAnimation(yOffset, (int)(absYoffset - pageOffsetStart));
+                }
+            } else if ((absYoffset - pageOffsetStart > (size.getHeight() / 2) || scrollNext)) {
+                animationManager.startYAnimation(yOffset, (int)(absYoffset - pdfFile.getPageOffset(pageNumber + 1, zoom)));
+            } else {
+                animationManager.startYAnimation(yOffset, (int)(absYoffset - pageOffsetStart));
+            }
+        }  else {
+            float absXoffset = Math.abs(xOffset);
+            pageNumber = pdfFile.getPageAtOffset(Math.abs(xOffset), zoom);
+            pageOffsetStart = pdfFile.getPageOffset(pageNumber, zoom);
+            SizeF size = pdfFile.getScaledPageSize(pageNumber, zoom);
+            if (pageNumber < pdfFile.getPagesCount() && scrollNext) {
+                if (director == Director.Right) {
+                    animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pdfFile.getPageOffset(pageNumber + 1, zoom)), yOffset);
+                } else if (director == Director.Left) {
+                    animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pageOffsetStart), yOffset);
+                }
+            } else if ((absXoffset - pageOffsetStart > (size.getWidth() / 2)) && pageNumber < pdfFile.getPagesCount()) {
+                animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pdfFile.getPageOffset(pageNumber + 1, zoom)), yOffset);
+            } else {
+                animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pageOffsetStart), yOffset);
+            }
         }
     }
 }

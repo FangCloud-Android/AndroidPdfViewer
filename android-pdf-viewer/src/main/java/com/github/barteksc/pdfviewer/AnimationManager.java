@@ -85,6 +85,12 @@ class AnimationManager {
         scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
     }
 
+    public void startScrollTo(int startX, int startY, int dx, int dy) {
+        stopAll();
+        flinging = true;
+        scroller.startScroll(startX, startY, dx, dy, 300);
+    }
+
     void computeFling() {
         if (scroller.computeScrollOffset()) {
             pdfView.moveTo(scroller.getCurrX(), scroller.getCurrY());
