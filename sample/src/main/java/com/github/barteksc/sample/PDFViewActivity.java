@@ -122,7 +122,9 @@ public class PDFViewActivity extends AppCompatActivity implements OnPageChangeLi
                 .scrollHandle(new DefaultScrollHandle(this))
                 .spacing(10) // in dp
                 .onPageError(this)
-                .pageFitPolicy(FitPolicy.BOTH)
+                .alwaysScrollToPageStart(true)
+                .swipeHorizontal(true)
+                .pageFitPolicy(FitPolicy.WIDTH)
                 .load();
     }
 
@@ -137,6 +139,9 @@ public class PDFViewActivity extends AppCompatActivity implements OnPageChangeLi
                 .scrollHandle(new DefaultScrollHandle(this))
                 .spacing(10) // in dp
                 .onPageError(this)
+                .alwaysScrollToPageStart(true)
+                .swipeHorizontal(true)
+                .pageFitPolicy(FitPolicy.WIDTH)
                 .load();
     }
 

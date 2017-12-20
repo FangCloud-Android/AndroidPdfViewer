@@ -277,6 +277,7 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
 
         float pageOffsetStart;
         int pageNumber;
+        float rellativePosition = (director == Director.Right  || director == Director.Down ? 2.5f : 1.5f);
         if (isSwipeVertical) {
             float absYoffset = Math.abs(yOffset);
             pageNumber = pdfFile.getPageAtOffset(absYoffset, zoom);
@@ -288,7 +289,7 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
                 } else if (director == Director.Up) {
                     animationManager.startYAnimation(yOffset, (int)(absYoffset - pageOffsetStart));
                 }
-            } else if ((absYoffset - pageOffsetStart > (size.getHeight() / 2) || scrollNext)) {
+            } else if ((absYoffset - pageOffsetStart > ((size.getHeight() / rellativePosition)) || scrollNext)) {
                 animationManager.startYAnimation(yOffset, (int)(absYoffset - pdfFile.getPageOffset(pageNumber + 1, zoom)));
             } else {
                 animationManager.startYAnimation(yOffset, (int)(absYoffset - pageOffsetStart));
@@ -304,7 +305,7 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
                 } else if (director == Director.Left) {
                     animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pageOffsetStart), yOffset);
                 }
-            } else if ((absXoffset - pageOffsetStart > (size.getWidth() / 2)) && pageNumber < pdfFile.getPagesCount()) {
+            } else if ((absXoffset - pageOffsetStart > (size.getWidth() / rellativePosition)) && pageNumber < pdfFile.getPagesCount()) {
                 animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pdfFile.getPageOffset(pageNumber + 1, zoom)), yOffset);
             } else {
                 animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pageOffsetStart), yOffset);
