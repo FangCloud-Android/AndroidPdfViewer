@@ -288,7 +288,7 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
                 } else if (director == Director.Up) {
                     animationManager.startYAnimation(yOffset, (int)(absYoffset - pageOffsetStart));
                 }
-            } else if ((absYoffset - pageOffsetStart > (size.getHeight() / 2) || scrollNext)) {
+            } else if ((absYoffset - pageOffsetStart > (size.getHeight() - (size.getHeight() / 3)) || scrollNext)) {
                 animationManager.startYAnimation(yOffset, (int)(absYoffset - pdfFile.getPageOffset(pageNumber + 1, zoom)));
             } else {
                 animationManager.startYAnimation(yOffset, (int)(absYoffset - pageOffsetStart));
@@ -304,7 +304,7 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
                 } else if (director == Director.Left) {
                     animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pageOffsetStart), yOffset);
                 }
-            } else if ((absXoffset - pageOffsetStart > (size.getWidth() / 2)) && pageNumber < pdfFile.getPagesCount()) {
+            } else if ((absXoffset - pageOffsetStart > (size.getWidth() / 3)) && pageNumber < pdfFile.getPagesCount()) {
                 animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pdfFile.getPageOffset(pageNumber + 1, zoom)), yOffset);
             } else {
                 animationManager.startScrollTo(xOffset, yOffset, (int)(absXoffset - pageOffsetStart), yOffset);
