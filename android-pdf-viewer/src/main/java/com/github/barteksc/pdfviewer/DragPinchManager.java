@@ -24,6 +24,7 @@ import android.view.View;
 
 import com.github.barteksc.pdfviewer.model.LinkTapEvent;
 import com.github.barteksc.pdfviewer.scroll.ScrollHandle;
+import com.github.barteksc.pdfviewer.util.Constants;
 import com.shockwave.pdfium.PdfDocument;
 import com.shockwave.pdfium.util.SizeF;
 
@@ -210,6 +211,16 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
         animationManager.startFlingAnimation(xOffset, yOffset, (int) (velocityX), (int) (velocityY),
                 (int) minX, 0, (int) minY, 0);
 
+        if (pdfView.alwaysScrollToPageStart() && !pdfView.isZooming()) {
+            if ((pdfView.isSwipeVertical()
+                    && (Math.abs(e2.getY() - e1.getY()) > Constants.Pinch.MINMUM_DISTENCE
+                    && velocityX > Constants.Pinch.MINMUM_VELOCITY))
+                    || (!pdfView.isSwipeVertical()
+                    && (Math.abs(e2.getX() - e1.getX()) > Constants.Pinch.MINMUM_DISTENCE
+                    || velocityY > Constants.Pinch.MINMUM_VELOCITY))) {
+                scrollNext = true;
+            }
+        }
         return true;
     }
 

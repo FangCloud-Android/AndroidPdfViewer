@@ -46,6 +46,9 @@ public class Constants {
 
         public static float MINIMUM_ZOOM = 1;
 
+        public static int MINMUM_DISTENCE = 200;
+
+        public static int MINMUM_VELOCITY = 120;
     }
 
 }

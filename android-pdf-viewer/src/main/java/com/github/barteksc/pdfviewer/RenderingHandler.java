@@ -16,7 +16,6 @@
 package com.github.barteksc.pdfviewer;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -48,20 +47,24 @@ class RenderingHandler extends Handler {
     private Matrix renderMatrix = new Matrix();
     private boolean running = false;
 
+    private RenderingTaskQueue<RenderingTask> taskQueue;
+
     RenderingHandler(Looper looper, PDFView pdfView) {
         super(looper);
         this.pdfView = pdfView;
+        this.taskQueue = new RenderingTaskQueue();
     }
 
     void addRenderingTask(int page, float width, float height, RectF bounds, boolean thumbnail, int cacheOrder, boolean bestQuality, boolean annotationRendering) {
         RenderingTask task = new RenderingTask(width, height, bounds, page, thumbnail, cacheOrder, bestQuality, annotationRendering);
-        Message msg = obtainMessage(MSG_RENDER_TASK, task);
+        Message msg = obtainMessage(MSG_RENDER_TASK, task.cacheOrder);
+        taskQueue.pushTask(task, page);
         sendMessage(msg);
     }
 
     @Override
     public void handleMessage(Message message) {
-        RenderingTask task = (RenderingTask) message.obj;
+        RenderingTask task = taskQueue.pollTask();
         try {
             final PagePart part = proceed(task);
             if (part != null) {
