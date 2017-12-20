@@ -17,6 +17,7 @@ package com.github.barteksc.pdfviewer;
 
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
@@ -210,6 +211,12 @@ class DragPinchManager implements GestureDetector.OnGestureListener, GestureDete
         animationManager.startFlingAnimation(xOffset, yOffset, (int) (velocityX), (int) (velocityY),
                 (int) minX, 0, (int) minY, 0);
 
+        if (pdfView.alwaysScrollToPageStart() && !pdfView.isZooming()) {
+            if ((pdfView.isSwipeVertical() && (Math.abs(e2.getY() - e1.getY()) > 120 && velocityX > 0))
+                    || (!pdfView.isSwipeVertical() && (Math.abs(e2.getX() - e1.getX()) > 120 || velocityY > 0))) {
+                scrollNext = true;
+            }
+        }
         return true;
     }
 
