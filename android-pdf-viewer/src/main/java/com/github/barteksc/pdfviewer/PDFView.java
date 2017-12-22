@@ -829,10 +829,6 @@ public class PDFView extends RelativeLayout {
         currentYOffset = offsetY;
         float positionOffset = getPositionOffset();
 
-        if (moveHandle && scrollHandle != null && !documentFitsView()) {
-            scrollHandle.setScroll(positionOffset);
-        }
-
         callbacks.callOnPageScroll(getCurrentPage(), positionOffset);
 
         redraw();

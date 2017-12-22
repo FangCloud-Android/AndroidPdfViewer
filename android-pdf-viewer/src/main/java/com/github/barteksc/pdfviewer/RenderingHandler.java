@@ -65,6 +65,9 @@ class RenderingHandler extends Handler {
     @Override
     public void handleMessage(Message message) {
         RenderingTask task = taskQueue.pollTask();
+        if (task == null)
+            return;
+
         try {
             final PagePart part = proceed(task);
             if (part != null) {

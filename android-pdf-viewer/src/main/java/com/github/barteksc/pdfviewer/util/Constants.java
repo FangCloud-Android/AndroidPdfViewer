@@ -51,4 +51,9 @@ public class Constants {
         public static int MINMUM_VELOCITY = 120;
     }
 
+    public static class Thumb {
+
+        public static int MAX_WIDTH = 1080;
+    }
+
 }

@@ -21,6 +21,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -45,6 +46,7 @@ import org.androidannotations.annotations.OptionsItem;
 import org.androidannotations.annotations.OptionsMenu;
 import org.androidannotations.annotations.ViewById;
 
+import java.io.File;
 import java.util.List;
 
 @EActivity(R.layout.activity_main)
@@ -64,7 +66,8 @@ public class PDFViewActivity extends AppCompatActivity implements OnPageChangeLi
     PDFView pdfView;
 
     @NonConfigurationInstance
-    Uri uri;
+    Uri uri = Uri.fromFile(
+            new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "pdf" + File.separator + "haizeiwang.pdf"));
 
     @NonConfigurationInstance
     Integer pageNumber = 0;

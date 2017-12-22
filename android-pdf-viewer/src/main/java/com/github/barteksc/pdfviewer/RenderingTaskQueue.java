@@ -36,6 +36,15 @@ public class RenderingTaskQueue<T> {
     }
 
     /**
+     * 判断是否存在执行队列重
+     * @param page
+     * @return
+     */
+    public boolean hasInQueue(int page) {
+        return renderStack.contains(page);
+    }
+
+    /**
      * 请求页面
      * @param task
      * @param page
