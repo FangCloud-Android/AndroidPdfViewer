@@ -52,7 +52,6 @@ public class Constants {
     }
 
     public static class Thumb {
-
         public static int MAX_WIDTH = 1080;
     }
 

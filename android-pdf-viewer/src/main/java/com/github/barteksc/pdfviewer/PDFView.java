@@ -330,12 +330,23 @@ public class PDFView extends RelativeLayout {
      * @see PDFView#getPositionOffset()
      */
     public void setPositionOffset(float progress, boolean moveHandle) {
+        float moveTo;
         if (swipeVertical) {
-            moveTo(currentXOffset, (-pdfFile.getDocLen(zoom) + getHeight()) * progress, moveHandle);
+            moveTo = (-pdfFile.getDocLen(zoom) + getHeight()) * progress;
+            moveTo(currentXOffset, checkLatestPosition(moveTo), moveHandle);
         } else {
-            moveTo((-pdfFile.getDocLen(zoom) + getWidth()) * progress, currentYOffset, moveHandle);
+            moveTo = (-pdfFile.getDocLen(zoom) + getWidth()) * progress;
+            moveTo(checkLatestPosition(moveTo), currentYOffset, moveHandle);
         }
         loadPageByOffset();
+    }
+
+    private float checkLatestPosition(float moveTo) {
+        if (alwaysScrollToPageStart) {
+            int pagePosition = pdfFile.getPageAtOffset(Math.abs(moveTo), zoom);
+            moveTo = -pdfFile.getPageOffset(pagePosition, zoom);
+        }
+        return moveTo;
     }
 
     public void setPositionOffset(float progress) {

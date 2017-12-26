@@ -47,24 +47,20 @@ class RenderingHandler extends Handler {
     private Matrix renderMatrix = new Matrix();
     private boolean running = false;
 
-    private RenderingTaskQueue<RenderingTask> taskQueue;
-
     RenderingHandler(Looper looper, PDFView pdfView) {
         super(looper);
         this.pdfView = pdfView;
-        this.taskQueue = new RenderingTaskQueue();
     }
 
     void addRenderingTask(int page, float width, float height, RectF bounds, boolean thumbnail, int cacheOrder, boolean bestQuality, boolean annotationRendering) {
         RenderingTask task = new RenderingTask(width, height, bounds, page, thumbnail, cacheOrder, bestQuality, annotationRendering);
-        Message msg = obtainMessage(MSG_RENDER_TASK, task.cacheOrder);
-        taskQueue.pushTask(task, page);
+        Message msg = obtainMessage(MSG_RENDER_TASK, task);
         sendMessage(msg);
     }
 
     @Override
     public void handleMessage(Message message) {
-        RenderingTask task = taskQueue.pollTask();
+        RenderingTask task = (RenderingTask) message.obj;
         if (task == null)
             return;
 
