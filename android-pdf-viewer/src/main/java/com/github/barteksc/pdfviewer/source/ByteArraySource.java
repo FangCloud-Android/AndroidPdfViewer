@@ -22,7 +22,7 @@ import com.shockwave.pdfium.PdfiumCore;
 
 import java.io.IOException;
 
-public class ByteArraySource implements DocumentSource {
+public class ByteArraySource extends DocumentSource {
 
     private byte[] data;
 
@@ -31,7 +31,7 @@ public class ByteArraySource implements DocumentSource {
     }
 
     @Override
-    public PdfDocument createDocument(Context context, PdfiumCore core, String password) throws IOException {
+    protected PdfDocument createDocument(Context context, PdfiumCore core, String password) throws IOException {
         return core.newDocument(data, password);
     }
 }

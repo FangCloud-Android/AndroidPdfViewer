@@ -24,7 +24,7 @@ import com.shockwave.pdfium.PdfiumCore;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class InputStreamSource implements DocumentSource {
+public class InputStreamSource extends DocumentSource {
 
     private InputStream inputStream;
 
@@ -33,7 +33,7 @@ public class InputStreamSource implements DocumentSource {
     }
 
     @Override
-    public PdfDocument createDocument(Context context, PdfiumCore core, String password) throws IOException {
+    protected PdfDocument createDocument(Context context, PdfiumCore core, String password) throws IOException {
         return core.newDocument(Util.toByteArray(inputStream), password);
     }
 }

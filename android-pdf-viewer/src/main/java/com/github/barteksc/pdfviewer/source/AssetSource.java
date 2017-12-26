@@ -26,7 +26,7 @@ import com.shockwave.pdfium.PdfiumCore;
 import java.io.File;
 import java.io.IOException;
 
-public class AssetSource implements DocumentSource {
+public class AssetSource extends DocumentSource {
 
     private final String assetName;
 
@@ -35,7 +35,7 @@ public class AssetSource implements DocumentSource {
     }
 
     @Override
-    public PdfDocument createDocument(Context context, PdfiumCore core, String password) throws IOException {
+    protected PdfDocument createDocument(Context context, PdfiumCore core, String password) throws IOException {
         File f = FileUtils.fileFromAsset(context, assetName);
         ParcelFileDescriptor pfd = ParcelFileDescriptor.open(f, ParcelFileDescriptor.MODE_READ_ONLY);
         return core.newDocument(pfd, password);
